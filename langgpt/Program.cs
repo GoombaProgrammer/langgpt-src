@@ -4,25 +4,8 @@ using System.Text.RegularExpressions;
 
 namespace langgpt
 {
-    internal static class Program
+    internal class Program
     {
-        public static IEnumerable<string> SplitAndKeep(this string s, char[] delims)
-        {
-            int start = 0, index;
-
-            while ((index = s.IndexOfAny(delims, start)) != -1)
-            {
-                if (index - start > 0)
-                    yield return s.Substring(start, index - start);
-                yield return s.Substring(index, 1);
-                start = index + 1;
-            }
-
-            if (start < s.Length)
-            {
-                yield return s.Substring(start);
-            }
-        }
         // langgpt is a simple GPT-3-like language model, but it is made to learn other languages.
         // For example, if the user types a sentence, the program will ask the user to type the translation of the sentence.
         // The program will then learn the translation of the sentence.
@@ -39,7 +22,7 @@ namespace langgpt
         static void Translate(string sentence)
         {
             // The program will split the sentence into words.
-            string[] words = sentence.SplitAndKeep(new char[] { ',', '.', '!', '?', ';', ':', '(', ')', '[', ']', '{', '}', '\'', '\"', '\r', '\n' }).ToArray();
+            string[] words = sentence.Split(' ');
             // The program will create a new string for the translation.
             string translation = "";
             List<string> nextnoun = new List<string>();
@@ -101,29 +84,10 @@ namespace langgpt
                     }
                     else
                     {
-                        // If it's a space, don't add it to the translation.
-                        if (word == " ")
-                        {
-                            goto cnti;
-                        }
-                        // If the word's size is 1, do not add a space
-                        if (word.Length < 3)
-                        {
-                            // The program will add the word to the translation.
-                            if (translation.EndsWith(" "))
-                            {
-                                translation = translation.Remove(translation.Length - 1);
-                            }
-                            translation += word;
-                        }
-                        else
-                        {
-                            // The program will add the word to the translation.
-                            translation += word + " ";
-                        }
+                        // The program will add the word to the translation.
+                        translation += word + " ";
                     }
                 }
-                cnti:
                 if (nouns.Contains(word))
                 {
                     foreach (string a in nextnoun)
