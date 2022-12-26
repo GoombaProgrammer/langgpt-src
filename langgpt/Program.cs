@@ -6,12 +6,8 @@ namespace langgpt
 {
     internal class Program
     {
-        // langgpt is a simple GPT-3-like language model, but it is made to learn other languages.
-        // For example, if the user types a sentence, the program will ask the user to type the translation of the sentence.
-        // The program will then learn the translation of the sentence.
-        // The program must detect the sentence structure of the languages based on the words.
-        // Then the program will learn the sentence structure of the language.
-
+        // langGPT is a language translator creator
+        
         // Learned words dictionary
         private static Dictionary<string, string> learnedWords = new();
         // Learned word order dictionary
