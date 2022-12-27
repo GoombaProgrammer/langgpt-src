@@ -28,54 +28,53 @@ namespace langgpt
             for (int i = 0; i < words.Length; i++)
             {
                 string word = words[i];
-                // The program will check if the word is in the learned words dictionary.
-                if (learnedWords.ContainsKey(word))
+                if (words.Length > (i + 1) && learnedWords.ContainsKey(words[i] + " " + words[i + 1]))
                 {
-                    // The program will add the translation of the word to the translation.
-                    if (learnedWordOrder.ContainsKey(word))
-                    {
-                        if (learnedWordOrder[word] == "noun")
-                        {
-                            nextnoun.Add(learnedWords[word]);
-                        }
-                        else if (learnedWordOrder[word] == "adjective")
-                        {
-                            nextadjective.Add(learnedWords[word]);
-                        }
-                    }
-                    else
+                    word = words[i] + " " + words[i + 1];
+                    // The program will check if the word is in the learned words dictionary.
+                    if (learnedWords.ContainsKey(word))
                     {
                         // The program will add the translation of the word to the translation.
-                        translation += learnedWords[word] + " ";
-                    }
-                }
-                // The program will check if the word is not in the learned words dictionary.
-                else
-                {
-                    if (words.Length > (i + 1) && learnedWords.ContainsKey(words[i] + " " + words[i + 1]))
-                    {
-                        word = words[i] + " " + words[i + 1];
-                        // The program will check if the word is in the learned words dictionary.
-                        if (learnedWords.ContainsKey(word))
+                        if (learnedWordOrder.ContainsKey(word))
+                        {
+                            if (learnedWordOrder[word] == "noun")
+                            {
+                                nextnoun.Add(learnedWords[word]);
+                            }
+                            else if (learnedWordOrder[word] == "adjective")
+                            {
+                                nextadjective.Add(learnedWords[word]);
+                            }
+                        }
+                        else
                         {
                             // The program will add the translation of the word to the translation.
-                            if (learnedWordOrder.ContainsKey(word))
+                            translation += learnedWords[word] + " ";
+                        }
+                        i++;
+                    }
+                }
+                else
+                {
+                    // The program will check if the word is in the learned words dictionary.
+                    if (learnedWords.ContainsKey(word))
+                    {
+                        // The program will add the translation of the word to the translation.
+                        if (learnedWordOrder.ContainsKey(word))
+                        {
+                            if (learnedWordOrder[word] == "noun")
                             {
-                                if (learnedWordOrder[word] == "noun")
-                                {
-                                    nextnoun.Add(learnedWords[word]);
-                                }
-                                else if (learnedWordOrder[word] == "adjective")
-                                {
-                                    nextadjective.Add(learnedWords[word]);
-                                }
+                                nextnoun.Add(learnedWords[word]);
                             }
-                            else
+                            else if (learnedWordOrder[word] == "adjective")
                             {
-                                // The program will add the translation of the word to the translation.
-                                translation += learnedWords[word] + " ";
+                                nextadjective.Add(learnedWords[word]);
                             }
-                            i++;
+                        }
+                        else
+                        {
+                            // The program will add the translation of the word to the translation.
+                            translation += learnedWords[word] + " ";
                         }
                     }
                     else
