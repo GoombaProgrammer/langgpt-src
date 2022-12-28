@@ -15,7 +15,7 @@ namespace langgpt
         private static string[] nouns = Properties.Resources.Nouns.Split("\r\n");
         private static string[] adjs = Properties.Resources.Adj.Split("\r\n");
 
-        static void Translate(string sentence)
+        static string Translate(string sentence)
         {
             // The program will split the sentence into words.
             string[] words = sentence.Split(' ');
@@ -28,6 +28,33 @@ namespace langgpt
             for (int i = 0; i < words.Length; i++)
             {
                 string word = words[i];
+                string punctutation = "";
+                if (word.EndsWith("..."))
+                {
+                    punctutation = "...";
+                    word = word.Replace("...", "");
+                }
+                else if (word.EndsWith(","))
+                {
+                    punctutation = ",";
+                    word = word.Replace(",", "");
+                }
+                else if (word.EndsWith("?"))
+                {
+                    punctutation = "?";
+                    word = word.Replace("?", "");
+                }
+                else if (word.EndsWith("!"))
+                {
+                    punctutation = "!";
+                    word = word.Replace("!", "");
+                }
+                else if (word.EndsWith("."))
+                {
+                    punctutation = ".";
+                    word = word.Replace(".", "");
+                }
+
                 if (words.Length > (i + 1) && learnedWords.ContainsKey(words[i] + " " + words[i + 1]))
                 {
                     word = words[i] + " " + words[i + 1];
@@ -49,7 +76,7 @@ namespace langgpt
                         else
                         {
                             // The program will add the translation of the word to the translation.
-                            translation += learnedWords[word] + " ";
+                            translation += learnedWords[word] + punctutation + " ";
                         }
                         i++;
                     }
@@ -74,20 +101,20 @@ namespace langgpt
                         else
                         {
                             // The program will add the translation of the word to the translation.
-                            translation += learnedWords[word] + " ";
+                            translation += learnedWords[word] + punctutation + " ";
                         }
                     }
                     else
                     {
                         // The program will add the word to the translation.
-                        translation += word + " ";
+                        translation += word + punctutation + " ";
                     }
                 }
                 if (nouns.Contains(word))
                 {
                     foreach (string a in nextnoun)
                     {
-                        translation += a + " ";
+                        translation += a + punctutation + " ";
                     }
                     nextnoun.Clear();
                 }
@@ -95,13 +122,14 @@ namespace langgpt
                 {
                     foreach (string a in nextadjective)
                     {
-                        translation += a + " ";
+                        translation += a + punctutation + " ";
                     }
                     nextadjective.Clear();
                 }
             }
             // The program will print the translation.
-            Console.WriteLine(translation);
+            var sentenceRegex = new Regex(@"(^[a-z])|[?!.:;]\s+(.)", RegexOptions.ExplicitCapture);
+            return sentenceRegex.Replace(translation.ToLower(), s => s.Value.ToUpper());
         }
         static void load()
         {
@@ -187,7 +215,7 @@ namespace langgpt
                 // Now the program will read the sentence.
                 string sentence = (Console.ReadLine() + "").ToLower();
                 // Translate sentence
-                Translate(sentence);
+                Console.WriteLine(Translate(sentence));
             }
             // The program will check if the command is "wordorder"
             else if (command.StartsWith("wor"))
